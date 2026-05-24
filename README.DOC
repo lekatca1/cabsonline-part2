@@ -1,0 +1,124 @@
+CabsOnline Part 2 - README
+Student: Robert | ID: 23217839
+==================================================
+
+1. PUBLIC URL
+--------------
+https://lekatca1.github.io/cabsonline-part2
+
+(Deploy with: npm run deploy)
+
+
+2. TECHNOLOGY STACK
+--------------------
+- React 18.2
+- react-leaflet 4.2.1 + Leaflet 1.9.4 (map)
+- OpenStreetMap tiles (free, no API key needed)
+- localStorage (demo data storage, no backend needed for GitHub Pages)
+- gh-pages 6.0 (deployment)
+- CSS (plain, no extra libraries)
+
+
+3. HOW TO RUN LOCALLY
+----------------------
+Requirements: Node.js 16+, npm
+
+Steps:
+  1. Unzip the project folder
+  2. Open terminal in the project folder
+  3. Run: npm install
+  4. Run: npm start
+  5. Open http://localhost:3000 in your browser
+
+To build for production:
+  npm run build
+
+To deploy to GitHub Pages:
+  npm run deploy
+
+
+4. FEATURES
+------------
+
+Feature 1 – Book a Taxi (tab: "Book a Taxi")
+  Extends Part 1 booking.html into React.
+  - All the same fields: cname, phone, unumber, snumber, stname, sbname, dsbname, date, time
+  - Client-side validation (required fields, phone format, date not in past)
+  - Generates BRN in format BRN00001, BRN00002, etc.
+  - Shows confirmation with booking reference number, pickup date and time
+  - Stores booking in localStorage (demo storage)
+
+Feature 2 – Booking Status Tracker (tab: "Track Booking")
+  Customers can check the status of their booking.
+  - Enter a BRN (e.g. BRN00001) to look up their booking
+  - Shows status progress bar: unassigned → assigned → completed
+  - Displays all booking details in a table
+
+Feature 3 – Fare Estimator (tab: "Fare Estimator")
+  Estimates the fare before booking.
+  - Select pickup and destination from Auckland suburb list
+  - Enter pickup time to check for night surcharge (10pm–6am = +20%)
+  - Shows base fare, distance charge, and total estimate
+  - Shows typical min/max fare range
+
+Feature 4 – Driver Map View (tab: "Driver Map")
+  Shows mock taxi driver locations on an interactive map.
+  - Uses Leaflet + OpenStreetMap (no API key needed)
+  - Green dots = online drivers, grey = offline
+  - Click a marker to see driver name, car, plate, area
+  - Filter drivers by online/offline status
+  - Driver card list below the map
+
+
+5. TESTING INSTRUCTIONS
+------------------------
+
+Example booking flow:
+  1. Go to "Book a Taxi" tab
+  2. Fill in: Name=John Smith, Phone=0211234567, Street No=1, Street=Queen St
+  3. Leave date/time as default (current)
+  4. Click "Book Now"
+  5. Note your BRN (e.g. BRN00001)
+
+Track a booking:
+  1. Go to "Track Booking" tab
+  2. Enter BRN00001 (or whatever BRN you received)
+  3. Click Search to see details and status
+
+Fare estimate:
+  1. Go to "Fare Estimator" tab
+  2. Pick "Auckland CBD" as pickup, "Albany" as destination
+  3. Try 23:00 as time to see night surcharge applied
+  4. Click "Estimate Fare"
+
+Driver map:
+  1. Go to "Driver Map" tab
+  2. Click on green/grey dots to see driver info
+  3. Use online/offline filter buttons
+
+History:
+  1. Go to "History" tab to see all bookings made this session
+
+Sample driver IDs: D001, D002, D003, D004, D005, D006
+
+
+6. LIMITATIONS / KNOWN ISSUES
+-------------------------------
+- Data is stored in localStorage only — it resets if the browser clears storage
+- Fare estimates are approximate (based on fixed suburb distances, not real GPS routing)
+- Driver locations are simulated (mock data, not real-time GPS)
+- No authentication — same as Part 1 (not required by assignment)
+- The "assigned" and "completed" status cannot be set from the customer side
+  (admin would need to update status — this is a demo limitation)
+
+
+7. REFLECTION ON AI-SUPPORTED DEVELOPMENT
+-------------------------------------------
+AI assistance (Claude) was used to help scaffold the React component structure,
+suggest appropriate Leaflet setup for fixing default marker icons in React,
+and advise on how to structure localStorage as a demo replacement for a PHP backend
+on GitHub Pages. The core logic (validation rules, BRN format, field names) was
+taken directly from the Part 1 specification and existing code to ensure consistency.
+
+The AI helped speed up repetitive boilerplate (CSS styling, form wiring) while the
+student made design decisions about feature selection, data structure, and UX flow.
