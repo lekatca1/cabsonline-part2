@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/cabsonline-part2/static/css/main.c8231373.css",
-    "main.js": "/cabsonline-part2/static/js/main.dc1761bd.js",
+    "main.css": "/cabsonline-part2/static/css/main.6a371dd3.css",
+    "main.js": "/cabsonline-part2/static/js/main.55a9b21d.js",
     "static/js/488.02a87549.chunk.js": "/cabsonline-part2/static/js/488.02a87549.chunk.js",
     "index.html": "/cabsonline-part2/index.html",
-    "main.c8231373.css.map": "/cabsonline-part2/static/css/main.c8231373.css.map",
-    "main.dc1761bd.js.map": "/cabsonline-part2/static/js/main.dc1761bd.js.map",
+    "main.6a371dd3.css.map": "/cabsonline-part2/static/css/main.6a371dd3.css.map",
+    "main.55a9b21d.js.map": "/cabsonline-part2/static/js/main.55a9b21d.js.map",
     "488.02a87549.chunk.js.map": "/cabsonline-part2/static/js/488.02a87549.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c8231373.css",
-    "static/js/main.dc1761bd.js"
+    "static/css/main.6a371dd3.css",
+    "static/js/main.55a9b21d.js"
   ]
 }
