@@ -3,63 +3,68 @@
  * CabsOnline Part 2 - Main React Application
  * Student: Robert | ID: 23217839
  *
- * Features:
- *   1. BookingForm     - Submit a taxi booking (extends Part 1)
- *   2. BookingTracker  - Track booking status by BRN
- *   3. FareEstimator   - Estimate trip fare before booking
- *   4. DriverMap       - View driver locations on a map (Leaflet/OpenStreetMap)
- *   5. BookingHistory  - View all past bookings in this session
- *   6. AdminDashboard  - Search bookings and assign taxis (extends Part 1 admin)
+ * Pages:
+ *   1. Book      - Booking form + driver map side by side
+ *   2. Track     - Look up booking status by BRN
+ *   3. Fare      - Estimate trip fare
+ *   4. Admin     - Search bookings and assign taxis
+ *   5. History   - View all past bookings this session
  */
 
 import React, { useState } from 'react';
 import './App.css';
-import BookingForm     from './components/BookingForm';
-import BookingTracker  from './components/BookingTracker';
-import FareEstimator   from './components/FareEstimator';
-import DriverMap       from './components/DriverMap';
-import BookingHistory  from './components/BookingHistory';
-import AdminDashboard  from './components/AdminDashboard';
+import BookPage    from './components/BookPage';
+import TrackPage   from './components/TrackPage';
+import FarePage    from './components/FarePage';
+import AdminPage   from './components/AdminPage';
+import HistoryPage from './components/HistoryPage';
 
 const TABS = [
-  { id: 'book',    label: '🚕 Book a Taxi' },
-  { id: 'track',   label: '🔍 Track Booking' },
-  { id: 'fare',    label: '💰 Fare Estimator' },
-  { id: 'map',     label: '🗺️ Driver Map' },
-  { id: 'history', label: '📋 History' },
-  { id: 'admin',   label: '🛠️ Admin' },
+  { id: 'book',    icon: '🚕', label: 'Book a Taxi'    },
+  { id: 'track',   icon: '🔍', label: 'Track Booking'  },
+  { id: 'fare',    icon: '💰', label: 'Fare Estimator' },
+  { id: 'admin',   icon: '🛠', label: 'Admin'          },
+  { id: 'history', icon: '📋', label: 'History'        },
 ];
 
 export default function App() {
   const [tab, setTab] = useState('book');
 
   return (
-    <div>
-      <div className="header">
-        <h1>🚖 CabsOnline</h1>
-        <span>Auckland Taxi Booking System</span>
-      </div>
+    <div className="app">
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="sidebar-logo">
+          <span className="logo-icon">🚖</span>
+          <h1>CabsOnline</h1>
+          <p>Auckland Taxi System</p>
+        </div>
 
-      <div className="nav">
         {TABS.map(t => (
           <button
             key={t.id}
-            className={tab === t.id ? 'active' : ''}
+            className={`nav-item ${tab === t.id ? 'active' : ''}`}
             onClick={() => setTab(t.id)}
           >
+            <span className="nav-icon">{t.icon}</span>
             {t.label}
           </button>
         ))}
-      </div>
 
-      <div className="main">
-        {tab === 'book'    && <BookingForm />}
-        {tab === 'track'   && <BookingTracker />}
-        {tab === 'fare'    && <FareEstimator />}
-        {tab === 'map'     && <DriverMap />}
-        {tab === 'history' && <BookingHistory />}
-        {tab === 'admin'   && <AdminDashboard />}
-      </div>
+        <div className="sidebar-footer">
+          Part 2 · React + Leaflet<br />
+          Demo data · localStorage
+        </div>
+      </aside>
+
+      {/* Main */}
+      <main className="main-content">
+        {tab === 'book'    && <BookPage />}
+        {tab === 'track'   && <TrackPage />}
+        {tab === 'fare'    && <FarePage />}
+        {tab === 'admin'   && <AdminPage />}
+        {tab === 'history' && <HistoryPage />}
+      </main>
     </div>
   );
 }
