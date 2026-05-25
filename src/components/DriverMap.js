@@ -25,7 +25,7 @@ const MOCK_DRIVERS = [
   { id: 'D003', name: 'Carol Smith',  lat: -36.8671, lng: 174.7680, status: 'offline', suburb: 'Newmarket',     car: 'Ford Focus',     plate: 'DEF456' },
   { id: 'D004', name: 'David Brown',  lat: -36.8745, lng: 174.7980, status: 'online',  suburb: 'Remuera',       car: 'Hyundai Ioniq',  plate: 'GHI012' },
   { id: 'D005', name: 'Eva Williams', lat: -36.8522, lng: 174.7200, status: 'online',  suburb: 'Ponsonby',      car: 'Tesla Model 3',  plate: 'JKL345' },
-  { id: 'D006', name: 'Frank Lee',    lat: -36.8330, lng: 174.7010, status: 'offline', suburb: 'Grey Lynn',     car: 'Nissan Leaf',    plate: 'MNO678' },
+  { id: 'D006', name: 'Frank Lee',    lat: -36.8330, lng: 174.7384, status: 'offline', suburb: 'Grey Lynn',     car: 'Nissan Leaf',    plate: 'MNO678' },
 ];
 
 // Create coloured marker icons
