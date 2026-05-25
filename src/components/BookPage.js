@@ -1,8 +1,6 @@
 /**
  * BookPage.js
- * Page 1: Book a Taxi + Driver Map (side by side)
- * Left: booking form. Right: live driver map (Leaflet/OpenStreetMap).
- * Stores bookings in localStorage for demo purposes.
+ * Page 1: Book a Taxi + Driver Map side by side
  */
 
 import React, { useState, useEffect } from 'react';
@@ -10,7 +8,6 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Fix Leaflet default marker icons in React
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
@@ -18,7 +15,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl:     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
 });
 
-// Mock drivers around Auckland
 const DRIVERS = [
   { id: 'D001', name: 'Alice Tane',   lat: -36.8485, lng: 174.7633, status: 'online',  suburb: 'Auckland CBD', car: 'Toyota Prius',  plate: 'ABC123' },
   { id: 'D002', name: 'Bob Ngata',    lat: -36.7996, lng: 174.7558, status: 'online',  suburb: 'Northcote',    car: 'Honda Civic',   plate: 'XYZ789' },
@@ -28,12 +24,11 @@ const DRIVERS = [
   { id: 'D006', name: 'Frank Lee',    lat: -36.8330, lng: 174.7010, status: 'offline', suburb: 'Grey Lynn',    car: 'Nissan Leaf',   plate: 'MNO678' },
 ];
 
-// Coloured circle marker
 function makeIcon(colour) {
   return L.divIcon({
-    html: `<div style="width:18px;height:18px;background:${colour};border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.5)"></div>`,
+    html: `<div style="width:16px;height:16px;background:${colour};border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.5)"></div>`,
     className: '',
-    iconAnchor: [9, 9],
+    iconAnchor: [8, 8],
     popupAnchor: [0, -12],
   });
 }
@@ -41,7 +36,6 @@ function makeIcon(colour) {
 const onlineIcon  = makeIcon('#4caf50');
 const offlineIcon = makeIcon('#555');
 
-// Helpers
 function todayStr() {
   const n = new Date();
   return `${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`;
@@ -71,13 +65,13 @@ export default function BookPage() {
   function change(e) { setForm({ ...form, [e.target.name]: e.target.value }); }
 
   function validate() {
-    if (!form.cname)                          return 'Customer name is required.';
-    if (!form.phone)                          return 'Phone number is required.';
-    if (!/^\d{10,12}$/.test(form.phone))      return 'Phone must be 10–12 digits, numbers only.';
-    if (!form.snumber)                        return 'Street number is required.';
-    if (!form.stname)                         return 'Street name is required.';
-    if (!form.date)                           return 'Pickup date is required.';
-    if (!form.time)                           return 'Pickup time is required.';
+    if (!form.cname)                        return 'Customer name is required.';
+    if (!form.phone)                        return 'Phone number is required.';
+    if (!/^\d{10,12}$/.test(form.phone))    return 'Phone must be 10-12 digits, numbers only.';
+    if (!form.snumber)                      return 'Street number is required.';
+    if (!form.stname)                       return 'Street name is required.';
+    if (!form.date)                         return 'Pickup date is required.';
+    if (!form.time)                         return 'Pickup time is required.';
     const [d,m,y] = form.date.split('/');
     if (new Date(`${y}-${m}-${d}T${form.time}`) < new Date()) return 'Pickup date/time cannot be in the past.';
     return null;
@@ -87,7 +81,6 @@ export default function BookPage() {
     setError(''); setConfirm(null);
     const err = validate();
     if (err) { setError(err); return; }
-
     const booking = { brn: nextBRN(), ...form, booking_datetime: new Date().toISOString(), status: 'unassigned' };
     const all = JSON.parse(localStorage.getItem('bookings') || '[]');
     localStorage.setItem('bookings', JSON.stringify([...all, booking]));
@@ -103,7 +96,6 @@ export default function BookPage() {
       <p className="page-subtitle">{onlineCount} drivers available near you right now</p>
 
       <div className="book-layout">
-        {/* ── LEFT: Booking Form ── */}
         <div>
           <div className="card">
             <div className="card-title">Your Details</div>
@@ -113,7 +105,7 @@ export default function BookPage() {
                 <input name="cname" value={form.cname} onChange={change} placeholder="John Smith" />
               </div>
               <div className="form-full">
-                <label>Phone Number * (10–12 digits)</label>
+                <label>Phone Number * (10-12 digits)</label>
                 <input name="phone" value={form.phone} onChange={change} placeholder="0211234567" />
               </div>
               <div>
@@ -145,19 +137,17 @@ export default function BookPage() {
                 <input type="time" name="time" value={form.time} onChange={change} />
               </div>
             </div>
-
-            {error && <p className="msg-error">⚠ {error}</p>}
+            {error && <p className="msg-error">{error}</p>}
             <div style={{ marginTop: 8 }}>
-              <button className="btn-primary" onClick={submit}>Book Now →</button>
+              <button className="btn-primary" onClick={submit}>Book Now</button>
             </div>
           </div>
 
-          {/* Confirmation */}
           {confirm && (
             <div className="confirm-box" id="reference">
               <div className="brn">{confirm.brn}</div>
               <p id="reference">
-                ✅ Booking confirmed!<br />
+                Booking confirmed!<br />
                 Booking reference number: {confirm.brn}<br />
                 Pickup date: {confirm.date}<br />
                 Pickup time: {confirm.time}
@@ -166,10 +156,10 @@ export default function BookPage() {
           )}
         </div>
 
-        {/* ── RIGHT: Driver Map ── */}
         <div className="map-panel">
+          <div className="card-title" style={{ marginBottom: 10 }}>Nearby Drivers</div>
           <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-            <MapContainer center={[-36.8485, 174.7633]} zoom={13} style={{ height: 460 }}>
+            <MapContainer center={[-36.8485, 174.7633]} zoom={13} style={{ height: 420 }}>
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -188,8 +178,6 @@ export default function BookPage() {
               ))}
             </MapContainer>
           </div>
-
-          {/* Driver pills */}
           <div className="driver-pills">
             {DRIVERS.map(d => (
               <div key={d.id} className="driver-pill">

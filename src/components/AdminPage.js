@@ -1,8 +1,6 @@
 /**
  * AdminPage.js
- * Page 4: Admin Dashboard
- * Search bookings by BRN or show upcoming unassigned bookings, then assign taxis.
- * Mirrors Part 1 admin.html/admin.php using localStorage.
+ * Page 4: Admin Dashboard — search bookings and assign taxis
  */
 
 import React, { useState } from 'react';
@@ -12,7 +10,6 @@ export default function AdminPage() {
   const [bookings, setBookings] = useState(null);
   const [message,  setMessage]  = useState({ text: '', type: '' });
 
-  // Mirrors admin.php searchBookings()
   function searchBookings() {
     setMessage({ text: '', type: '' }); setBookings(null);
 
@@ -38,7 +35,6 @@ export default function AdminPage() {
     }
   }
 
-  // Mirrors admin.php assignTaxi()
   function assignTaxi(brn) {
     const all = JSON.parse(localStorage.getItem('bookings') || '[]');
     localStorage.setItem('bookings', JSON.stringify(all.map(b => b.brn === brn ? { ...b, status: 'assigned' } : b)));
@@ -49,7 +45,7 @@ export default function AdminPage() {
   return (
     <div>
       <h1 className="page-title">Admin Dashboard</h1>
-      <p className="page-subtitle">Search bookings by reference number, or leave blank to see upcoming unassigned bookings.</p>
+      <p className="page-subtitle">Search by reference number, or leave blank to see upcoming unassigned bookings.</p>
 
       <div className="card">
         <div className="card-title">Search Bookings</div>
@@ -75,12 +71,11 @@ export default function AdminPage() {
         </div>
         {message.text && (
           <p className={message.type === 'error' ? 'msg-error' : 'msg-success'} id="message">
-            {message.type === 'error' ? '⚠ ' : '✅ '}{message.text}
+            {message.text}
           </p>
         )}
       </div>
 
-      {/* Results — div class="content" matches assignment spec */}
       {bookings !== null && (
         <div className="card content" id="results" style={{ padding: 0, overflowX: 'auto' }}>
           {bookings.length === 0 ? (

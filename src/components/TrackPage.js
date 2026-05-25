@@ -1,7 +1,6 @@
 /**
  * TrackPage.js
  * Page 2: Track Booking Status
- * Look up a BRN to see booking details and status progress.
  */
 
 import React, { useState } from 'react';
@@ -43,14 +42,12 @@ export default function TrackPage() {
             Search
           </button>
         </div>
-        {error && <p className="msg-error">⚠ {error}</p>}
+        {error && <p className="msg-error">{error}</p>}
       </div>
 
       {booking && (
         <div className="card">
           <div className="card-title">Booking Details</div>
-
-          {/* Progress bar */}
           <div className="progress-bar">
             {STEPS.map((step, i) => (
               <div key={step} className="progress-step">
@@ -59,7 +56,6 @@ export default function TrackPage() {
               </div>
             ))}
           </div>
-
           <table className="detail-table">
             <tbody>
               <tr><td>Reference</td><td><strong style={{ color: 'var(--yellow)' }}>{booking.brn}</strong></td></tr>

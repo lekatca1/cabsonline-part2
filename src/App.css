@@ -50,6 +50,7 @@
   color: var(--muted);
   background: none;
   border: none;
+  border-radius: 0;
   width: 100%;
   text-align: left;
   font-size: 0.9rem;

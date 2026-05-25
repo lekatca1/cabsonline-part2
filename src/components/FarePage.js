@@ -1,7 +1,6 @@
 /**
  * FarePage.js
  * Page 3: Fare Estimator
- * Calculates estimated fare between Auckland suburbs.
  */
 
 import React, { useState } from 'react';
@@ -37,8 +36,8 @@ export default function FarePage() {
 
   function estimate() {
     setError(''); setResult(null);
-    if (!pickup || !dest)  { setError('Please select both suburbs.'); return; }
-    if (pickup === dest)   { setError('Pickup and destination cannot be the same.'); return; }
+    if (!pickup || !dest) { setError('Please select both suburbs.'); return; }
+    if (pickup === dest)  { setError('Pickup and destination cannot be the same.'); return; }
 
     const from  = SUBURBS.find(s => s.name === pickup);
     const to    = SUBURBS.find(s => s.name === dest);
@@ -54,7 +53,7 @@ export default function FarePage() {
   return (
     <div>
       <h1 className="page-title">Fare Estimator</h1>
-      <p className="page-subtitle">Get an estimated fare for your trip before you book.</p>
+      <p className="page-subtitle">Get an estimated fare before you book.</p>
 
       <div className="card">
         <div className="card-title">Trip Details</div>
@@ -79,11 +78,11 @@ export default function FarePage() {
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end' }}>
             <button className="btn-primary" onClick={estimate} style={{ marginBottom: 16 }}>
-              Estimate Fare →
+              Estimate Fare
             </button>
           </div>
         </div>
-        {error && <p className="msg-error">⚠ {error}</p>}
+        {error && <p className="msg-error">{error}</p>}
       </div>
 
       {result && (
@@ -91,9 +90,9 @@ export default function FarePage() {
           <div className="label">Estimated Fare</div>
           <div className="amount">${result.total}</div>
           <div className="fare-breakdown">
-            <span>📍 ~{result.dist} km</span>
-            <span>🏁 $3.50 base + ${(result.dist * 2.20).toFixed(2)} distance</span>
-            {result.night && <span>🌙 Night surcharge (20%) applied</span>}
+            <span>Distance: ~{result.dist} km</span>
+            <span>Base fare $3.50 + distance charge ${(result.dist * 2.20).toFixed(2)}</span>
+            {result.night && <span>Night surcharge (20%) applied</span>}
             <span style={{ opacity: 0.5, fontSize: '0.8rem' }}>
               Typical range: ${result.min} – ${result.max}
             </span>

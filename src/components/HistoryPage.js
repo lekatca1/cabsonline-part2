@@ -1,7 +1,6 @@
 /**
  * HistoryPage.js
  * Page 5: Booking History
- * Shows all bookings stored in localStorage this session.
  */
 
 import React, { useState, useEffect } from 'react';
