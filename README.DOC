@@ -37,40 +37,77 @@ To deploy to GitHub Pages:
   npm run deploy
 
 
-4. FEATURES
-------------
+4. MICROSERVICE API ENDPOINTS
+------------------------------
+This application is deployed as a static site on GitHub Pages and therefore
+does not call a remote PHP/MySQL backend. Instead, data persistence is handled
+via the browser's localStorage API, which serves as a local data layer
+replacing the Part 1 PHP/MySQL backend. This approach was chosen because
+GitHub Pages does not support server-side execution.
 
-Feature 1 – Book a Taxi (tab: "Book a Taxi")
-  Extends Part 1 booking.html into React.
-  - All the same fields: cname, phone, unumber, snumber, stname, sbname, dsbname, date, time
+Local Data Operations (localStorage):
+
+  READ    bookings
+            localStorage.getItem('bookings')
+            Returns all bookings as a JSON array.
+            Used by: TrackPage, AdminPage, HistoryPage
+
+  WRITE   bookings
+            localStorage.setItem('bookings', JSON.stringify([...all, newBooking]))
+            Appends a new booking object to the stored array.
+            Used by: BookPage (on successful form submission)
+
+  UPDATE  bookings/{brn}
+            localStorage.setItem('bookings', JSON.stringify(updated))
+            Maps over the array and updates the status field of the matching
+            booking by BRN from 'unassigned' to 'assigned'.
+            Used by: AdminPage (on Assign button click)
+
+Remote Endpoints:
+
+  OpenStreetMap Tile Server
+    URL:    https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+    Method: GET (handled internally by Leaflet)
+    Purpose: Renders the interactive map tiles on the Book a Taxi and
+             Driver Map views. Free to use, no API key required.
+
+
+5. FEATURE DESCRIPTIONS
+------------------------
+
+Feature 1 - Book a Taxi (tab: "Book a Taxi")
+  Extends Part 1 booking.html into a React component.
+  - All required fields: cname, phone, unumber, snumber, stname, sbname, dsbname, date, time
   - Client-side validation (required fields, phone format, date not in past)
-  - Generates BRN in format BRN00001, BRN00002, etc.
-  - Shows confirmation with booking reference number, pickup date and time
-  - Stores booking in localStorage (demo storage)
+  - Generates BRN in incremental format BRN00001, BRN00002, etc.
+  - Displays a confirmation message with booking reference number, pickup date and time
+  - Stores booking in localStorage
+  - Leaflet map on the right panel shows nearby mock driver locations in real time
 
-Feature 2 – Booking Status Tracker (tab: "Track Booking")
-  Customers can check the status of their booking.
-  - Enter a BRN (e.g. BRN00001) to look up their booking
-  - Shows status progress bar: unassigned → assigned → completed
-  - Displays all booking details in a table
+Feature 2 - Booking Status Tracker (tab: "Track Booking")
+  Allows customers to check the current status of their booking.
+  - Enter a BRN (e.g. BRN00001) to look up a booking
+  - Validates BRN format before querying
+  - Displays a visual progress bar: unassigned -> assigned -> completed
+  - Shows full booking details in a structured table
 
-Feature 3 – Fare Estimator (tab: "Fare Estimator")
-  Estimates the fare before booking.
-  - Select pickup and destination from Auckland suburb list
-  - Enter pickup time to check for night surcharge (10pm–6am = +20%)
-  - Shows base fare, distance charge, and total estimate
-  - Shows typical min/max fare range
+Feature 3 - Fare Estimator (tab: "Fare Estimator")
+  Estimates the fare for a trip before the customer books.
+  - Select pickup and destination from a list of Auckland suburbs
+  - Enter pickup time to check for night surcharge (10pm-6am = +20%)
+  - Calculates base fare ($3.50 flag fall) plus per-kilometre rate ($2.20/km)
+  - Displays the estimated total and a typical min/max fare range
 
-Feature 4 – Driver Map View (tab: "Driver Map")
-  Shows mock taxi driver locations on an interactive map.
+Feature 4 - Driver Map View (tab: "Book a Taxi" side panel)
+  Shows mock taxi driver locations on an interactive Leaflet map.
   - Uses Leaflet + OpenStreetMap (no API key needed)
-  - Green dots = online drivers, grey = offline
-  - Click a marker to see driver name, car, plate, area
+  - Green dot markers = online drivers, grey = offline
+  - Click any marker to see driver name, car model, plate number, and suburb
   - Filter drivers by online/offline status
-  - Driver card list below the map
+  - Driver summary cards displayed below the map
 
 
-5. TESTING INSTRUCTIONS
+6. TESTING INSTRUCTIONS
 ------------------------
 
 Example booking flow:
@@ -83,7 +120,7 @@ Example booking flow:
 Track a booking:
   1. Go to "Track Booking" tab
   2. Enter BRN00001 (or whatever BRN you received)
-  3. Click Search to see details and status
+  3. Click Search to see details and status progress bar
 
 Fare estimate:
   1. Go to "Fare Estimator" tab
@@ -92,24 +129,33 @@ Fare estimate:
   4. Click "Estimate Fare"
 
 Driver map:
-  1. Go to "Driver Map" tab
-  2. Click on green/grey dots to see driver info
-  3. Use online/offline filter buttons
+  1. Go to "Book a Taxi" tab and view the map panel on the right
+  2. Click on green/grey dot markers to see driver info popups
+  3. Use the online/offline filter buttons
+
+Admin:
+  1. Go to "Admin" tab
+  2. Leave search empty and click "Search Bookings" to see upcoming unassigned bookings
+  3. Enter a specific BRN to find a record, then click "Assign"
 
 History:
   1. Go to "History" tab to see all bookings made this session
+  2. Use the filter pills to view by status
 
 Sample driver IDs: D001, D002, D003, D004, D005, D006
 
 
-6. LIMITATIONS / KNOWN ISSUES
+7. LIMITATIONS / KNOWN ISSUES
 -------------------------------
 - Data is stored in localStorage only — it resets if the browser clears storage
+  or the user opens the app in a different browser/device
 - Fare estimates are approximate (based on fixed suburb distances, not real GPS routing)
-- Driver locations are simulated (mock data, not real-time GPS)
-- No authentication — same as Part 1 (not required by assignment)
-- The "assigned" and "completed" status cannot be set from the customer side
-  (admin would need to update status — this is a demo limitation)
+- Driver locations are simulated mock data, not real-time GPS
+- No authentication — same as Part 1 (not required by the assignment specification)
+- The "assigned" and "completed" status can only be updated via the Admin tab;
+  customers cannot change their own booking status (intentional design decision)
+- BRN numbering is based on the length of the localStorage array, so if bookings
+  are cleared mid-session, BRN numbers may repeat
 
 
 7. REFLECTION ON AI-SUPPORTED DEVELOPMENT
@@ -120,5 +166,7 @@ and advise on how to structure localStorage as a demo replacement for a PHP back
 on GitHub Pages. The core logic (validation rules, BRN format, field names) was
 taken directly from the Part 1 specification and existing code to ensure consistency.
 
-The AI helped speed up repetitive boilerplate (CSS styling, form wiring) while the
-student made design decisions about feature selection, data structure, and UX flow.
+The student was responsible for all design decisions including feature selection,
+UX layout, field validation rules, fare calculation logic, and ensuring the BRN
+format and field naming conventions matched the Part 1 specification exactly.
+AI was used as a productivity tool, not as a replacement for understanding.
